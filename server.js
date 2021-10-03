@@ -21,7 +21,7 @@ mongoose
   })
   .catch((err) => console.log("ERROR", err));
 
-app.use("/api/v1", userRoute);
+app.use("/api/v1/user", userRoute);
 app.use("/api/v1/auth", authRoute);
 
 const PORT = process.env.PORT || 3000;

@@ -18,9 +18,9 @@ router.post("/register", async (req, res) => {
     if (userCreated) {
       const { password, ...others } = userCreated._doc;
 
-      res.status(201).json(others);
+      return res.status(201).json(others);
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         message: "Something went wrong, Please Try Again!",
       });
     }
@@ -52,19 +52,19 @@ router.post("/login", async (req, res) => {
           { expiresIn: "3d" }
         );
 
-        res.status(200).json({ ...others, accessToken });
+        return res.status(200).json({ ...others, accessToken });
       } else {
-        res
+        return res
           .status(401)
           .json({ message: "You have entered wrong username or password!" });
       }
     } else {
-      res
+      return res
         .status(401)
         .json({ message: "You have entered wrong username or password!" });
     }
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 });
 
