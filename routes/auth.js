@@ -15,7 +15,9 @@ router.post("/register", async (req, res) => {
   try {
     const userCreated = await newUser.save();
     if (userCreated) {
-      res.status(201).json(userCreated);
+      const { password, ...others } = userCreated._doc;
+
+      res.status(201).json(others);
     } else {
       res.status(500).json({
         message: "Something went wrong, Please Try Again!",
@@ -23,9 +25,36 @@ router.post("/register", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json(err);
-    // res.status(500).json({
-    //   message: "Something went wrong, Please Try Again!",
-    // });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      username: req.body.username,
+    });
+    if (user) {
+      const hashedPassword = CryptoJS.AES.decrypt(
+        user.password,
+        process.env.cryptoJSSecretKEY
+      );
+      const userPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+      if (userPassword === req.body.password) {
+        const { password, ...others } = user._doc;
+
+        res.status(200).json(others);
+      } else {
+        res
+          .status(401)
+          .json({ message: "You have entered wrong username or password!" });
+      }
+    } else {
+      res
+        .status(401)
+        .json({ message: "You have entered wrong username or password!" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 
