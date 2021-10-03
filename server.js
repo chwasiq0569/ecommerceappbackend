@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const userRoute = require("./routes/user");
+const authRoute = require("./routes/auth");
 
 const app = express();
 app.use(express.json());
@@ -21,39 +22,7 @@ mongoose
   .catch((err) => console.log("ERROR", err));
 
 app.use("/api/v1", userRoute);
-
-// app.get("/", (req, res) => {
-//   const tourSchema = mongoose.Schema({
-//     name: {
-//       type: String,
-//       required: [true, "A Tour must have a name."],
-//       unique: true,
-//     },
-//     rating: {
-//       type: Number,
-//       default: 4.5,
-//     },
-//     price: {
-//       type: Number,
-//       required: [true, "A Tour must have a price."],
-//     },
-//   });
-
-//   const Tour = mongoose.model("Tour", tourSchema);
-
-//   const testTour = new Tour({
-//     name: "The Forest Hiker",
-//     rating: 4.7,
-//     price: 497,
-//   });
-
-//   testTour
-//     .save()
-//     .then((doc) => console.log("doc", doc))
-//     .catch((err) => console.log("Error", err));
-
-//   res.send("SEND");
-// });
+app.use("/api/v1/auth", authRoute);
 
 const PORT = process.env.PORT || 3000;
 
