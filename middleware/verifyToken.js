@@ -20,4 +20,12 @@ const verifyTokenAndAuthorize = (req, res, next) => {
   });
 };
 
-module.exports = { verifyToken, verifyTokenAndAuthorize };
+const verifyTokenAndAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else return res.status(403).json({ message: "You are not authorized!" });
+  });
+};
+
+module.exports = { verifyToken, verifyTokenAndAuthorize, verifyTokenAndAdmin };
