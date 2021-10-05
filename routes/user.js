@@ -20,7 +20,9 @@ router.get("/userstats", verifyTokenAndAdmin, async (req, res) => {
     ]);
 
     res.status(200).json(data);
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.put("/:id", verifyTokenAndAuthorize, async (req, res) => {
