@@ -22,7 +22,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     { new: true }
   );
   try {
-    res.status(200).json({ status: 1, data: updatedProduct });
+    if (updatedProduct) {
+      res.status(200).json({ status: 1, data: updatedProduct });
+    }
   } catch (err) {
     res.status(500).json(err);
   }
@@ -31,7 +33,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   const deletedProduct = await Product.findByIdAndDelete(req.params.id);
   try {
-    res.status(200).json({ status: 1, message: "Product has been deleted" });
+    if (deletedProduct) {
+      res.status(200).json({ status: 1, message: "Product has been deleted" });
+    }
   } catch (err) {
     res.status(500).json(err);
   }
