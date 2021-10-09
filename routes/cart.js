@@ -12,7 +12,7 @@ router.post("/", verifyTokenAndAuthorize, async (req, res) => {
   }
 });
 
-router.post("/:id", verifyTokenAndAuthorize, async (req, res) => {
+router.get("/:id", verifyTokenAndAuthorize, async (req, res) => {
   try {
     const cart = await Cart.find(req.params.id);
     if (cart) {
@@ -36,7 +36,24 @@ router.delete("/:id", verifyTokenAndAuthorize, async (req, res) => {
 
 router.get("/:userId", verifyTokenAndAuthorize, async (req, res) => {
   try {
-    const cart = await Cart.find({ userId: req.params.userId });
+    const cart = await Cart.findOne({ userId: req.params.userId });
+    if (cart) {
+      res.status(200).json({ status: 1, data: cart });
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.put("/:id", verifyTokenAndAuthorize, async (req, res) => {
+  try {
+    const cart = await Cart.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
     if (cart) {
       res.status(200).json({ status: 1, data: cart });
     }
